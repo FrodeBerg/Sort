@@ -17,13 +17,13 @@
             </li>
             <li>
                 <select id="algo1"  class="form-select" aria-label="Disabled select example" >
-                    <option value="1">Heap</option>
+                    <option value="1">Selection</option>
                     <option value="2">Bubble</option>
                     <option value="3">Merge</option>
                 </select>  
             </li>
             <li>
-                <button id="run" class="btn btn-primary" class="algo">Run</button>
+                <button id="run" class="btn btn-primary" class="algo" onclick="choose()">Run</button>
             </li>
             <li>
                 <button id="shuffle2" class="btn btn-secondary" onclick="shuffle('list2')">Shuffle2</button>
@@ -33,12 +33,14 @@
             </li>
             <li>
                 <select id="algo2"  class="form-select" aria-label="Disabled select example" >
-                    <option value="1">Heap</option>
+                    <option value="1">Selection</option>
                     <option value="2">Bubble</option>
                     <option value="3">Merge</option>
                 </select>  
-            </li>
+            </li>               
         </ul>
+
+        <input id="speed" type="number" value="15" min="1" placeholder="Speed" max="100" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" style="margin: auto; width:20%;">
 
         <ul id="arrays" class="algo">
             <li id="array1">
@@ -78,13 +80,32 @@
                 setUpElements(elements2, "list2", "array2");
             }
 
+            // chose sorting algorithm 
+            function choose()
+            {
+                let sort1 = document.querySelector("#algo1").value;
+                let sort2 = document.querySelector("#algo2").value;
+                
+                clearElements("list2");
+                clearElements("list1");
+
+                if (sort1 == 1) selectionSort("list1");
+                else if (sort1 == 2 ) bubbleSort("list1");
+                else mergeSort("list1");
+
+                if (sort2 == 1) selectionSort("list2");
+                else if (sort2 == 2 ) bubbleSort("list2");
+                else mergeSort("list2");
+
+            }
+
             // Adds new elements 
             function setUpElements(x, list, array)
             {
                 const svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
                 svg.setAttribute("id", list);
                 svg.setAttribute("width", "500");
-                svg.setAttribute("height", "200");
+                svg.setAttribute("height", "220");
 
                 // ADDs each element
                 for (let i = 0; i < x; i++){
@@ -94,7 +115,7 @@
 
                     var rect=document.createElementNS("http://www.w3.org/2000/svg", 'rect');
                     rect.setAttribute("width", width);
-                    rect.setAttribute("height", i * 200 / x);
+                    rect.setAttribute("height", (i + 1) * 200 / x);
                     rect.setAttribute("x", i * width * 2);
 
 
@@ -103,8 +124,21 @@
                 document.getElementById(array).appendChild(svg);
             }
 
+            // makes all elements original color
+            function clearElements(list)
+            {
+                let parent = document.getElementById(list);
+                let x = parent.childElementCount;
+                for (let i = 0; i < x; i++)
+                {
+                    parent.children[i].setAttribute("style", "fill:rgb(0,0,0)");
+                }
+            }
             // Shuffles all elements in array 
-            function shuffle(list){
+            function shuffle(list)
+            {
+                clearElements("list1");
+                clearElements("list2");
 
                 let parent = document.getElementById(list);
                 for (const child of parent.children)
@@ -112,6 +146,198 @@
                     let rNum = Math.floor(Math.random() * 200);
                     child.setAttribute("height", rNum);
                     console.log(child.tagName);
+                }
+            }
+
+            // Selection sort 
+            function selectionSort(list) 
+            {
+                let parent = document.getElementById(list);
+                let x = parent.childElementCount;
+
+                // Outer Loop
+                outerLoop(0);
+                function outerLoop(i)
+                {
+                    let smallestNum = 200;
+                    let index = i;
+      
+                    // Inner loop                  
+                    let functions = 0;
+                    innerLoop(i);
+                    function innerLoop(j) {
+                        setTimeout(function () {
+                            functions = 1;
+                            parent.children[j].setAttribute("style", "fill:rgb(0,0,0)");
+                            if (j + 1 < x) parent.children[j + 1].setAttribute("style", "fill:rgb(255,165,0)");
+                            if (parent.children[j].getAttribute("height") < smallestNum)
+                            {
+                                functions += 2;
+                                parent.children[index].setAttribute("style", "fill:rgb(0,0,0)");
+                                smallestNum = parseInt(parent.children[j].getAttribute("height"));
+                                index = j;
+                                parent.children[j].setAttribute("style", "fill:rgb(255,0,0)");
+                            }
+                            j ++;
+                            if (j == x - 1) functions += 3;
+                            if(j < x) innerLoop(j);
+                            else swap();
+                        }, document.getElementById("speed").value * functions / 3);
+                    }
+
+                    function swap()
+                    {
+                        let tmp = parent.children[i].getAttribute("height");
+                        parent.children[i].setAttribute("height", smallestNum);
+                        parent.children[i].setAttribute("style", "fill:rgb(0,255,0)");
+                        parent.children[index].setAttribute("height", tmp);
+                        if (index != i) parent.children[index].setAttribute("style", "fill:rgb(0,0,0)");
+                        i++ 
+                        if (i < x) outerLoop(i);
+                    }
+                }
+            }
+
+            // Bubble sort 
+            function bubbleSort(list)
+            {
+                let parent = document.getElementById(list);
+                let x = parent.childElementCount;
+
+                let sorted = false;
+
+                // Outer Loop
+                outerLoop(x);
+                function outerLoop(j)
+                {                            
+                    parent.children[j - 1].setAttribute("style", "fill:rgb(0,255,0)");
+                    sorted = true;
+                    i = 0;
+                    // Inner Loop
+                    functions = 0;
+                    innerLoop(0)
+                    function innerLoop(i)
+                    {   setTimeout(function()
+                        {
+                            functions = 1;
+                            let currentHeigt = parseInt(parent.children[i].getAttribute("height"));
+                            let nextHeight = parseInt(parent.children[i + 1].getAttribute("height"));
+
+                            if (i < j - 1) parent.children[i].setAttribute("style", "fill:rgb(0,0,0)");
+                            if (i < j - 2) parent.children[i + 1].setAttribute("style", "fill:rgb(0,0,0)");
+
+                            // checks if current element is > next and swaps if so
+                            if (currentHeigt > nextHeight)
+                            {
+                                functions += 3;
+                                parent.children[i].setAttribute("height", nextHeight);
+                                parent.children[i + 1].setAttribute("height", currentHeigt);
+                                sorted = false;
+                            }
+                            i ++;
+                            if (i < j - 1) parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");
+                            if (i < j - 2) parent.children[i + 1].setAttribute("style", "fill:rgb(255,165,0)");
+
+                            if (i < (j - 1)) innerLoop(i);
+                            else if (!sorted) outerLoop(j - 1);
+                            else if (sorted)
+                            {
+                                for (let i = 0; i < x; i++)
+                                {
+                                    parent.children[i].setAttribute("style", "fill:rgb(0,255,0)");
+                                }
+                            }
+                        }, document.getElementById("speed").value * functions / 3);
+                    }
+
+
+                }
+            }
+
+            // Merge sort
+            function mergeSort(list)
+            {
+                let parent = document.getElementById(list);
+                let x = parent.childElementCount;
+                
+                // temporary array
+                let tmp = [x];
+                for (let i = 0; i < x; i++)
+                {
+                    tmp[i] = parseInt(parent.children[i].getAttribute("height"));
+                }
+                let i = 0;
+                for (let element in sort(tmp))
+                {
+                    parent.children[i].setAttribute("height", element);
+                    i++;
+                }
+                
+
+                function sort(array)
+                {
+                    y = array.length;
+
+                    if (y <= 1) {
+                        return array;
+                    }
+                    
+                    let left = [Math.floor(y / 2)];
+                    let right = [y-left.length];
+
+                    // split parent in two parts
+                    for (let i = 0; i < left.length; i++)
+                    {
+                        left[i] = array[i];
+                    }
+
+                    for (let i = 0; i < right.length; i ++)
+                    {
+                        right[i] = array[i + (left.length - 1)];
+                    }
+
+                    // sort left 
+                    let tmpLeft = sort(left);
+
+                    // sort right 
+                    let tmpRight = sort(right);
+                
+                    // merge
+                    arrayLength = tmpLeft.length + tmpRight.length;
+                    let sortTmp = [arrayLength];
+                    let i = 0;
+                    let j = 0;
+
+                    while (i < tmpRight.length)
+                    {
+                        if (j < tmpLeft.length)
+                        {
+                            if (tmpLeft[j] > tmpRight[i])
+                            {
+                                sortTmp[i + j] = tmpLeft[j];
+                                j++;
+                            }
+                            else
+                            {
+                                sortTmp[i + j] = tmpRight[i];
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            sortTmp[i + j] = tmpRight[i];
+                            i++;
+                        }
+                    }
+
+                    while (j < tmpLeft.length)
+                    {
+                        sortTmp[i + j] = tmpLeft[j];
+                        j++;
+                    }
+                    
+                    return sortTmp;
+                    
                 }
             }
 
