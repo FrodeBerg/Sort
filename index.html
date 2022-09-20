@@ -143,7 +143,7 @@
                 let parent = document.getElementById(list);
                 for (const child of parent.children)
                 {  
-                    let rNum = Math.floor(Math.random() * 200);
+                    let rNum = Math.floor(Math.random() * 199 + 1);
                     child.setAttribute("height", rNum);
                     console.log(child.tagName);
                 }
@@ -260,86 +260,97 @@
                 let parent = document.getElementById(list);
                 let x = parent.childElementCount;
                 
-                // temporary array
+                // populate temporary array
                 let tmp = [x];
                 for (let i = 0; i < x; i++)
                 {
                     tmp[i] = parseInt(parent.children[i].getAttribute("height"));
                 }
                 let i = 0;
-                for (let element in sort(tmp))
+
+                sort(tmp, 0, tmp.length - 1)
+
+                function sort(tmp1, left, right)
                 {
-                    parent.children[i].setAttribute("height", element);
-                    i++;
+                    if (left >= right) return;
+
+                    let middle = left + parseInt((right - left) / 2);
+
+                    // sort left by inputting array from left to middle
+                    sort(tmp1, left, middle);
+
+                    // sort right by inputting array from middle to right 
+                    sort(tmp1, middle + 1, right);
+
+                    return merge(tmp1, left, middle, right);
                 }
-                
 
-                function sort(array)
+                // Merge left and right part of array 
+                function merge(tmp1, left, middle, right)
                 {
-                    y = array.length;
+                    // Lengths of subarrays
+                    let leftLength = middle - left + 1;
+                    let rightLength = right - middle;
 
-                    if (y <= 1) {
-                        return array;
+                    // Left and right subbarray
+                    let tmpLeft = [leftLength];
+                    let tmpRight = [rightLength];
+
+                    // Copy from array to subarrays
+                    for (let i = 0; i < leftLength; i++)
+                    { 
+                        tmpLeft[i] = tmp1[i + left];
                     }
-                    
-                    let left = [Math.floor(y / 2)];
-                    let right = [y-left.length];
-
-                    // split parent in two parts
-                    for (let i = 0; i < left.length; i++)
+                    for (let i = 0; i < rightLength; i++)
                     {
-                        left[i] = array[i];
-                    }
-
-                    for (let i = 0; i < right.length; i ++)
-                    {
-                        right[i] = array[i + (left.length - 1)];
+                        tmpRight[i] = tmp1[i + middle + 1]
                     }
 
-                    // sort left 
-                    let tmpLeft = sort(left);
+                    // indxes 
+                    let leftI = 0;
+                    let rightI = 0;
+                    let i = left;
 
-                    // sort right 
-                    let tmpRight = sort(right);
-                
-                    // merge
-                    arrayLength = tmpLeft.length + tmpRight.length;
-                    let sortTmp = [arrayLength];
-                    let i = 0;
-                    let j = 0;
-
-                    while (i < tmpRight.length)
+                    // Compares every element in both arrays
+                    while (leftI < leftLength)
                     {
-                        if (j < tmpLeft.length)
+                        if (rightI < rightLength)
                         {
-                            if (tmpLeft[j] > tmpRight[i])
+                            if (tmpLeft[leftI] <= tmpRight[rightI])
                             {
-                                sortTmp[i + j] = tmpLeft[j];
-                                j++;
+                                tmp1[i] = tmpLeft[leftI];
+                                parent.children[i].setAttribute("height", tmp1[i]);
+                                i++;
+                                leftI ++;
                             }
                             else
                             {
-                                sortTmp[i + j] = tmpRight[i];
+                                tmp1[i] = tmpRight[rightI];
+                                parent.children[i].setAttribute("height", tmp1[i]);
                                 i++;
+                                rightI ++; 
                             }
                         }
                         else
                         {
-                            sortTmp[i + j] = tmpRight[i];
+                            tmp1[i] = tmpLeft[leftI];
+                            parent.children[i].setAttribute("height", tmp1[i]);
                             i++;
+                            leftI ++;
                         }
                     }
 
-                    while (j < tmpLeft.length)
+                    while (rightI < rightLength)
                     {
-                        sortTmp[i + j] = tmpLeft[j];
-                        j++;
+                        tmp1[i] = tmpRight[rightI];
+                        parent.children[i].setAttribute("height", tmp1[i]);
+                        i++;
+                        rightI ++; 
                     }
-                    
-                    return sortTmp;
-                    
                 }
+               
             }
+            
 
         </script>
         
