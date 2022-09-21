@@ -285,13 +285,13 @@
                     await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value * 4 / 3));
 
                     // Merge two subarrays
-                    merge(tmp1, left, middle, right);  
+                    await merge(tmp1, left, middle, right);  
 
                     return true;
                 }
 
                 // Merge left and right part of array 
-                function merge(tmp1, left, middle, right)
+                async function merge(tmp1, left, middle, right)
                 {
                     // Lengths of subarrays
                     let leftLength = middle - left + 1;
@@ -311,7 +311,7 @@
                         tmpRight[i] = tmp1[i + middle + 1]
                     }
 
-                    // indxes 
+                    // Indices 
                     let leftI = 0;
                     let rightI = 0;
                     let i = left;
@@ -323,23 +323,44 @@
                         {
                             if (tmpLeft[leftI] <= tmpRight[rightI])
                             {
+                                // Colors for every element
+                                parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");    
+
+                                // Timeout to create animation 
+                                await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value / 3));
+
                                 tmp1[i] = tmpLeft[leftI];
                                 parent.children[i].setAttribute("height", tmp1[i]);
+
                                 i++;
                                 leftI ++;
                             }
                             else
                             {
+                                // Colors for every element
+                                parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");  
+
+                                // Timeout to create animation 
+                                await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value / 3));
+
                                 tmp1[i] = tmpRight[rightI];
                                 parent.children[i].setAttribute("height", tmp1[i]);
+
                                 i++;
                                 rightI ++; 
                             }
                         }
                         else
                         {
+                            // Colors for every element
+                            parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");  
+
+                            // Timeout to create animation
+                            await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value / 3));
+
                             tmp1[i] = tmpLeft[leftI];
                             parent.children[i].setAttribute("height", tmp1[i]);
+
                             i++;
                             leftI ++;
                         }
@@ -347,10 +368,27 @@
 
                     while (rightI < rightLength)
                     {
+                        // Colors for every element
+                        parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");
+
+                        // Timeout to create animation
+                        await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value / 3));
                         tmp1[i] = tmpRight[rightI];
                         parent.children[i].setAttribute("height", tmp1[i]);
+
                         i++;
                         rightI ++; 
+                    }
+
+
+
+                    // wait for number of functions in merge
+                    await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value * 17 / 3));
+
+                    // Colors for every element
+                    for (let i = left; i < right + 1; i++)
+                    {
+                        parent.children[i].setAttribute("style", "fill:rgb(0,255,0)");                          
                     }
                 }
                
