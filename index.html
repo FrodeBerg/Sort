@@ -268,21 +268,26 @@
                 }
                 let i = 0;
 
+                // sort function
                 sort(tmp, 0, tmp.length - 1)
-
-                function sort(tmp1, left, right)
-                {
-                    if (left >= right) return;
+                async function sort(tmp1, left, right)
+                {   
+                    if (left >= right) return true;
 
                     let middle = left + parseInt((right - left) / 2);
+                    
+                    // Sort left by inputting array from left to middle
+                    await sort(tmp1, left, middle);
+                
+                    // Sort right by inputting array from middle to right 
+                    await sort(tmp1, middle + 1, right);
 
-                    // sort left by inputting array from left to middle
-                    sort(tmp1, left, middle);
+                    await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value * 4 / 3));
 
-                    // sort right by inputting array from middle to right 
-                    sort(tmp1, middle + 1, right);
+                    // Merge two subarrays
+                    merge(tmp1, left, middle, right);  
 
-                    return merge(tmp1, left, middle, right);
+                    return true;
                 }
 
                 // Merge left and right part of array 
