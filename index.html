@@ -7,43 +7,70 @@
             <title>Sorting Algorithm</title>
     </head>
 
-    <body>
-        <ul class="algo" id="settings">
-            <li>
+    <body class="body">
+        <ul class="header" id="settings">
+            <li class="list">
                 <button id="run" class="btn btn-primary" class="algo" onclick="choose()">Run</button>
             </li>
-            <li>
+            <li class="list">
                 <button id="shuffle" class="btn btn-secondary" onclick="shuffle()">Shuffle</button>
             </li>
             <input id="speed" type="range" value="100" min="1" placeholder="Speed" max="500"  aria-label="Small" aria-describedby="inputGroup-sizing-sm" style="margin: auto; width:20%;">
         </ul>
 
-
-        <ul id="arrays" class="box">
-            <li style="width: 20%; margin-right:0%" >
-                <input id="number1" type="range" value="5" min="2" max="15" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                <select id="algo1"  class="form-select" aria-label="Disabled select example" >
-                    <option value="1">Selection</option>
-                    <option value="2">Bubble</option>
-                    <option value="3">Merge</option>
-                </select>  
+        <ul class="firstArray">
+            <li class="selection">
+                <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group" id="select2">
+                    <input type="radio" class="btn-check" name="select2" id="selection1" autocomplete="off" value="1" checked>
+                    <label class="btn btn-outline-primary" for="selection1">Selection</label>
+                
+                    <input type="radio" class="btn-check" name="select2" id="bubble1" autocomplete="off" value="2">
+                    <label class="btn btn-outline-primary" for="bubble1">Bubble</label>
+                
+                    <input type="radio" class="btn-check" name="select2" id="merge1" autocomplete="off" value="3">
+                    <label class="btn btn-outline-primary" for="merge1">Merge</label>
+                </div>  
             </li>
-            <li id="array1" style="transform: rotate(180deg); width:60%; margin-left:auto;">
-            </li> 
+           <li class="slider">
+                 <input id="number1" type="range" value="6" min="2" max="15" >
+            </li>
+            <li style="transform: rotate(180deg); width:80%;" class="list">
+               <ul id="arrays">
+                    <li id="array1">
+
+                    </li> 
+                </ul>
+            </li>
+
         </ul>
 
-        <ul id="arrays" class="box">
-            <li id="array2"  style=" width: 60%; margin-right:0%">
+        <ul class="secondArray">
+            <li class="list" style=" width: 80%;">
+                <ul id="arrays" class="box">
+                    <li id="array2">
+
+                    </li>
+                </ul> 
             </li>
-            <li style="width: 20%; ">
-                <input id="number2" type="range" value="5" min="2" max="15" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                <select id="algo2"  class="form-select" aria-label="Disabled select example" >
-                    <option value="1">Selection</option>
-                    <option value="2">Bubble</option>
-                    <option value="3">Merge</option>
-                </select>  
+            <li class="slider2">
+                <input id="number2" type="range" value="6" min="2" max="15">
             </li>
+            <li class="selection2">
+                <form action=""></form>
+                <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group" id="select1">
+                    <input type="radio" class="btn-check" name="select1" id="selection" autocomplete="off" value="1">
+                    <label class="btn btn-outline-primary" for="selection">Selection</label>
+                
+                    <input type="radio" class="btn-check" name="select1" id="bubble" autocomplete="off" value="2" checked>
+                    <label class="btn btn-outline-primary" for="bubble">Bubble</label>
+                
+                    <input type="radio" class="btn-check" name="select1" id="merge" autocomplete="off" value="3">
+                    <label class="btn btn-outline-primary" for="merge">Merge</label>
+                </div>  
+            </li>
+
         </ul>
+
         <script>
             document.body.onload = setup;
             // Gets number of elements in each array
@@ -75,9 +102,29 @@
             // Chose sorting algorithm 
             function choose()
             {
-                let sort1 = document.querySelector("#algo1").value;
-                let sort2 = document.querySelector("#algo2").value;
+                var element1 = document.getElementsByName("select1");
+                var element2 = document.getElementsByName("select2");
                 
+                let sort1 = 1;
+                let sort2 = 1;
+                for (let i=0; i < element1.length ; i++)
+                {
+                    if (element1[i].type="radio")
+                    {
+                        if (element1[i].checked)
+                        {
+                            sort1 = element1[i].value;
+                        }  
+                    }
+                    if (element2[i].type="radio")
+                    {
+                        if (element2[i].checked)
+                        {
+                            sort2 = element2[i].value;
+                        }  
+                    }
+                }
+
                 clearElements("list2");
                 clearElements("list1");
 
@@ -109,6 +156,7 @@
                 for (let i = 0; i < x; i++){
 
                     var rect=document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+                    rect.setAttribute("style", "fill:rgb(35,35,35)")
                     rect.setAttribute("width", 50 / x + "%");
                     rect.setAttribute("height", (i + 1) * 100 / x + "%");
                     rect.setAttribute("x", (50/ x ) * 2 * i + "%");
@@ -126,7 +174,7 @@
                 let x = parent.childElementCount;
                 for (let i = 0; i < x; i++)
                 {
-                    parent.children[i].setAttribute("style", "fill:rgb(0,0,0)");
+                    parent.children[i].setAttribute("style", "fill:rgb(35,35,35)");
                 }
             }
             // Shuffles all elements in array 
@@ -144,7 +192,7 @@
                         let r = Math.round(Math.random() * (parent.childElementCount - 1));
                         parent.children[i].setAttribute("height", parseInt(parent.children[r].getAttribute("height"))  + "%");
                         parent.children[r].setAttribute("height", tmp + "%");
-                        parent.children[i].setAttribute("style", "fill:rgb(0,0,0)");
+                        parent.children[i].setAttribute("style", "fill:rgb(35,35,35)");
                     }
                 }
             }
@@ -168,12 +216,12 @@
                     function innerLoop(j) {
                         setTimeout(function () {
                             functions = 1;
-                            parent.children[j].setAttribute("style", "fill:rgb(0,0,0)");
+                            parent.children[j].setAttribute("style", "fill:rgb(35,35,35)");
                             if (j + 1 < x) parent.children[j + 1].setAttribute("style", "fill:rgb(255,165,0)");
                             if (parseInt(parent.children[j].getAttribute("height")) < smallestNum)
                             {
                                 functions += 2;
-                                parent.children[index].setAttribute("style", "fill:rgb(0,0,0)");
+                                parent.children[index].setAttribute("style", "fill:rgb(35,35,35)");
                                 smallestNum = parseInt(parent.children[j].getAttribute("height"));
                                 index = j;
                                 parent.children[j].setAttribute("style", "fill:rgb(255,0,0)");
@@ -189,9 +237,9 @@
                     {
                         let tmp = parseInt(parent.children[i].getAttribute("height"));
                         parent.children[i].setAttribute("height", smallestNum + "%");
-                        parent.children[i].setAttribute("style", "fill:rgb(0,255,0)");
+                        parent.children[i].setAttribute("style", "fill:rgb(60,255,0)");
                         parent.children[index].setAttribute("height", tmp + "%");
-                        if (index != i) parent.children[index].setAttribute("style", "fill:rgb(0,0,0)");
+                        if (index != i) parent.children[index].setAttribute("style", "fill:rgb(35,35,35)");
                         i++ 
                         if (i < x) outerLoop(i);
                         else enable(1); // Enables buttons
@@ -213,7 +261,7 @@
                 outerLoop(x);
                 function outerLoop(j)
                 {                            
-                    parent.children[j - 1].setAttribute("style", "fill:rgb(0,255,0)");
+                    parent.children[j - 1].setAttribute("style", "fill:rgb(60,255,0)");
                     sorted = true;
                     i = 0;
                     // Inner Loop
@@ -226,8 +274,8 @@
                             let currentHeigt = parseInt(parent.children[i].getAttribute("height"));
                             let nextHeight = parseInt(parent.children[i + 1].getAttribute("height"));
 
-                            if (i < j - 1) parent.children[i].setAttribute("style", "fill:rgb(0,0,0)");
-                            if (i < j - 2) parent.children[i + 1].setAttribute("style", "fill:rgb(0,0,0)");
+                            if (i < j - 1) parent.children[i].setAttribute("style", "fill:rgb(35,35,35)");
+                            if (i < j - 2) parent.children[i + 1].setAttribute("style", "fill:rgb(35,35,35)");
 
                             // checks if current element is > next and swaps if so
                             if (currentHeigt > nextHeight)
@@ -247,7 +295,7 @@
                             {
                                 for (let i = 0; i < x; i++)
                                 {
-                                    parent.children[i].setAttribute("style", "fill:rgb(0,255,0)");
+                                    parent.children[i].setAttribute("style", "fill:rgb(60,255,0)");
                                 }
                                 // Enables buttons
                                 enable(1);
@@ -398,7 +446,7 @@
                     // Colors for every element
                     for (let i = left; i < right + 1; i++)
                     {
-                        parent.children[i].setAttribute("style", "fill:rgb(0,255,0)");                          
+                        parent.children[i].setAttribute("style", "fill:rgb(60,255,0)");                          
                     }
                 }
             }
