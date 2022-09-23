@@ -27,9 +27,9 @@
 
             <li class="list" >
                 <div  style=" display: flex;">
-                    <button class="btn btn-outline-secondary btn-sm" disabled><i class="fa-solid fa-forward"></i></button>
-                    <input id="speed" type="range" value="20" min="1" placeholder="Speed" max="100"  aria-label="Small" aria-describedby="inputGroup-sizing-sm" style=" width:40%;">
                     <button class="btn btn-outline-secondary btn-sm" disabled><i class="fa-sharp fa-solid fa-play"></i></button>
+                    <input id="speed" type="range" value="5" min="1" placeholder="Speed" max="10"  aria-label="Small" aria-describedby="inputGroup-sizing-sm" style=" width:40%;">
+                    <button class="btn btn-outline-secondary btn-sm" disabled><i class="fa-solid fa-forward"></i></button>
                 </div>
             </li>
  
@@ -80,7 +80,7 @@
         </div>
 
         <script>
-            var maxSpeed = 100;
+            var maxSpeed = 40;
             document.body.onload = setup;
             // Gets number of elements in each array
             let elements_array1 = document.querySelector('#number1').addEventListener('change', function(){
@@ -245,7 +245,7 @@
                             if (j == x - 1) functions += 3;
                             if(j < x) innerLoop(j);
                             else swap();
-                        }, maxSpeed / document.getElementById("speed").value * functions);
+                        }, (maxSpeed / document.getElementById("speed").value) * functions);
                     }
 
                     function swap()
@@ -315,7 +315,7 @@
                                 // Enables buttons
                                 enable(1);
                             }
-                        },maxSpeed / document.getElementById("speed").value * functions);
+                        },(maxSpeed / document.getElementById("speed").value) * functions);
                     }
                 }
 
@@ -351,7 +351,7 @@
                     // Sort right by inputting array from middle to right 
                     await sort(tmp1, middle + 1, right);
 
-                    await new Promise(resolve => setTimeout(resolve, document.getElementById("speed").value * 4 / 10));
+                    await new Promise(resolve => setTimeout(resolve, (maxSpeed / document.getElementById("speed").value) * 4));
 
                     // Merge two subarrays
                     await merge(tmp1, left, middle, right);  
@@ -396,7 +396,7 @@
                                 parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");    
 
                                 // Timeout to create animation 
-                                await new Promise(resolve => setTimeout(resolve, maxSpeed / document.getElementById("speed").value * 3));
+                                await new Promise(resolve => setTimeout(resolve, (maxSpeed / document.getElementById("speed").value) * 2));
 
                                 tmp1[i] = tmpLeft[leftI];
                                 parent.children[i].setAttribute("height", tmp1[i] + "%");
@@ -412,7 +412,7 @@
                                 parent.children[i + leftLength - leftI].setAttribute("style", "fill:rgb(255,0,0)"); 
 
                                 // Timeout to create animation 
-                                await new Promise(resolve => setTimeout(resolve, maxSpeed / document.getElementById("speed").value * 3));
+                                await new Promise(resolve => setTimeout(resolve, (maxSpeed / document.getElementById("speed").value) * 2));
 
                                 tmp1[i] = tmpRight[rightI];
                                 parent.children[i].setAttribute("height", tmp1[i] + "%");
@@ -429,7 +429,7 @@
                             parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");  
 
                             // Timeout to create animation
-                            await new Promise(resolve => setTimeout(resolve, maxSpeed / document.getElementById("speed").value * 3));
+                            await new Promise(resolve => setTimeout(resolve, maxSpeed / (document.getElementById("speed").value) * 2));
 
                             tmp1[i] = tmpLeft[leftI];
                             parent.children[i].setAttribute("height", tmp1[i] + "%");
@@ -445,7 +445,7 @@
                         parent.children[i].setAttribute("style", "fill:rgb(255,165,0)");
 
                         // Timeout to create animation
-                        await new Promise(resolve => setTimeout(resolve, maxSpeed / document.getElementById("speed").value * 3));
+                        await new Promise(resolve => setTimeout(resolve, (maxSpeed / document.getElementById("speed").value) * 2));
                         tmp1[i] = tmpRight[rightI];
                         parent.children[i].setAttribute("height", tmp1[i] + "%");
 
@@ -456,7 +456,7 @@
 
 
                     // wait for number of functions in merge
-                    await new Promise(resolve => setTimeout(resolve, maxSpeed / document.getElementById("speed").value * 17));
+                    await new Promise(resolve => setTimeout(resolve, (maxSpeed / document.getElementById("speed").value) * 12));
 
                     // Colors for every element
                     for (let i = left; i < right + 1; i++)
